@@ -1,4 +1,4 @@
-name: Secure CI/CD Pipeline 
+name: Secure CI/CD Pipeline (Basic)
 
 on:
   push:
@@ -8,16 +8,14 @@ on:
 
 jobs:
   build-and-test:
-    runs-on: ubuntu-latest  
+    runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [16, 18]  
+        node-version: [16] 
 
     env:
-    
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
-      API_KEY: ${{ secrets.API_KEY }}
+      TEST_DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
 
     steps:
       - uses: actions/checkout@v3
@@ -26,42 +24,13 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'  
+          cache: 'npm' 
           cache-dependency-path: 'package-lock.json'
 
       - name: Install dependencies (common)
-        run: npm ci  
+        run: npm ci 
 
-      - name: Install project-specific dependencies (optional)
-        working-directory: ./  
-        run: npm install  
+      - name: Run tests
+        run: npm test 
 
-      - name: Lint code (optional)
-        run: npm run lint  
-
-      - name: Build and test Backend (if present)
-        run: |
-          if [ -d "Backend" ]; then
-            cd Backend && npm install && npm run build && npm test
-            # Add error handling or logging (optional)
-          fi
-
-      - name: Build and test Frontend (if present)
-        run: |
-          if [ -d "Frontend" ]; then
-            cd Frontend && npm install && npm run build && npm test
-            # Add error handling or logging (optional)
-          fi
-
-      - name: Upload coverage reports (optional)
-        uses: actions/upload-artifact@v3
-        with:
-          name: coverage_${{ matrix.node-version }}
-          path: coverage/  
-        if: success() && steps.build-and-test.outputs.coverage 
-
-      - name: Deploy to staging (optional) 
-        uses: actions/checkout@v3  
-        if: github.event.name == 'push' && github.base_ref == 'main'  
-        
-
+    
