@@ -1,4 +1,4 @@
-name: Node.js CI
+name: Github Actions
 
 on:
   push:
@@ -7,44 +7,62 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
-
+  build-and-test:
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
-        node-version: [18.x]
+        node-version: [16, 18]  
 
-    steps:    
-    - uses: actions/checkout@v4
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-        cache-dependency-path: Backend/package-lock.json
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      API_KEY: ${{ secrets.API_KEY }}
 
-    # Backend
-    - name: Install dependencies for the backend
-      working-directory: ./Backend
-      run: npm i
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies (common)
+        run: npm ci  
+
+      - name: Cache Node Modules (optional, adjust path if needed)
+        uses: actions/cache@v3  
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-build-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-
+
+      - name: Lint code 
+        run: npm run lint  
+
+      - name: Build and test Backend (if present)
+        run: |
+          if [ -d "Backend" ]; then
+            cd Backend && npm run build && npm test
+          fi
+
+      - name: Build and test Frontend (if present)
+        run: |
+          if [ -d "Frontend" ]; then
+            cd Frontend && npm run build && npm test
+          fi
+
+      - name: Upload coverage reports (optional)
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage_${{ matrix.node-version }}
+          path: coverage/  
+        if: success() && steps.build-and-test.outputs.coverage 
+
+      - name: Deploy to staging 
+        uses: actions/checkout@v3  
+        if: github.event.name == 'push' && github.base_ref == 'main'  
     
-    - name: Build backend
-      working-directory: ./Backend
-      run: npm run build --if-present
-    
-    - name: Run backend
-      working-directory: ./Backend
-      run: npm test
-    # Frontend
-    - name: Install dependencies for frontend
-      working-directory: ./Frontend
-      run: npm i
 
-    - name: Build frontend
-      working-directory: ./Frontend
-      run: npm run build --if-present
 
-    - name: Run frontend
-      working-directory: ./Frontend
-      run: npm text
