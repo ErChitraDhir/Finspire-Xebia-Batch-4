@@ -1,4 +1,4 @@
-name: pipeline
+name: PIPELINE
 
 on:
   push:
@@ -15,6 +15,7 @@ jobs:
         node-version: [18.x]  
 
     env:
+      
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
       API_KEY: ${{ secrets.API_KEY }}
 
@@ -25,19 +26,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-          cache-dependency-path: package-lock.json
+          
 
       - name: Install dependencies (common)
-        run: npm ci  # Consistent cache handling
-
-      - name: Cache Node Modules (optional, adjust path if needed)
-        uses: actions/cache@v3  # Cache NPM modules across jobs
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-build-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-
+        run: npm ci  
 
       - name: Lint code (optional)
         run: npm run lint  
@@ -60,12 +52,10 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: coverage_${{ matrix.node-version }}
-          path: coverage/  
+          path: coverage/ 
         if: success() && steps.build-and-test.outputs.coverage 
 
-      - name: Deploy to staging (optional)  
+      - name: Deploy to staging (optional) 
         uses: actions/checkout@v3  
         if: github.event.name == 'push' && github.base_ref == 'main'  
-        
-
 
