@@ -1,0 +1,29 @@
+name: Backend Tests
+
+on:
+  push:
+    branches: [ main ]  
+
+jobs:
+  test:
+    runs-on: ubuntu-latest  
+
+    steps:
+      - uses: actions/checkout@v3  
+
+      - name: Use Node.js 16  
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests  
+        run: npm test  
+
+      - name: Upload test coverage 
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage
+          path: coverage/  
