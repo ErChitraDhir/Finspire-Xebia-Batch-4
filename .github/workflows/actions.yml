@@ -8,13 +8,14 @@ on:
 
 jobs:
   build-and-test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  
 
     strategy:
       matrix:
-        node-version: [18]  
+        node-version: [16, 18]  
 
     env:
+    
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
       API_KEY: ${{ secrets.API_KEY }}
 
@@ -26,10 +27,14 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'  
-          cache-dependency-path: 'package-lock.json'  
+          cache-dependency-path: 'package-lock.json'
 
       - name: Install dependencies (common)
         run: npm ci  
+
+      - name: Install project-specific dependencies (optional)
+        working-directory: ./  
+        run: npm install  
 
       - name: Lint code (optional)
         run: npm run lint  
@@ -48,5 +53,15 @@ jobs:
             # Add error handling or logging (optional)
           fi
 
-    
+      - name: Upload coverage reports (optional)
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage_${{ matrix.node-version }}
+          path: coverage/  
+        if: success() && steps.build-and-test.outputs.coverage 
+
+      - name: Deploy to staging (optional) 
+        uses: actions/checkout@v3  
+        if: github.event.name == 'push' && github.base_ref == 'main'  
+        
 
