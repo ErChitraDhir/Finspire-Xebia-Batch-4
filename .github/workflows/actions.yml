@@ -12,25 +12,30 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16] 
+        node-version: [16] # Specify a single Node.js version
 
     env:
+      # Replace these with placeholders for your actual secrets (use GitHub Secrets)
       TEST_DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
 
     steps:
       - uses: actions/checkout@v3
 
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Set up Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm' 
-          cache-dependency-path: 'package-lock.json'
 
-      - name: Install dependencies (common)
-        run: npm ci 
+      - name: Cache npm dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: npm ci
 
       - name: Run tests
-        run: npm test 
-
-    
+        run: npm test # Adjust command if using a different test runner
