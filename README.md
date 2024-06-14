@@ -7,6 +7,13 @@ Simplify your finances, inspire your future.
 ```
 PORT=4001
 MONGODB_URI="mongodb://localhost:27017/bankingapplication"
+JWT_LOGIN_TOKEN='#'
+EMAILPASSWORD="#"
+EMAILID="#"
+TWILIO_ACCOUNT_SID = "#"
+TWILIO_AUTH_TOKEN = "#"
+TWILIO_SERVICE_SID = "#"
+
 ```
 # How to run Backend
 - Clone the repository
