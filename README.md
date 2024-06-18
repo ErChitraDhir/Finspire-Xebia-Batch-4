@@ -2,7 +2,7 @@
 
 Simplify your finances, inspire your future.
 
-# ENV for fetching loaction
+# ENV for fetching location
 LOQATE_API_KEY="#"
 
 # ENV for Backend
