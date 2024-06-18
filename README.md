@@ -2,6 +2,9 @@
 
 Simplify your finances, inspire your future.
 
+# ENV for fetching loaction
+LOQATE_API_KEY="#"
+
 # ENV for Backend
 
 ```
