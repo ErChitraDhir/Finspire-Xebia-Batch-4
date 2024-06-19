@@ -16,6 +16,10 @@ const submitPersonalDetails = async (req, res) => {
       .status(201)
       .json({ message: "Customer registered successfully", customer });
   } catch (error) {
+    if (customer && customer._id) {
+      // If the customer has been saved, delete the entry
+      await Customer.findByIdAndDelete(customer._id);
+    }
     res
       .status(400)
       .json({ message: "Failed to register customer", error: error.message });
