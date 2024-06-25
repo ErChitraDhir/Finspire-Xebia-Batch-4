@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Prompt:wght@400;600;700&display=swap');
+.containerAPI {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px; 
+    list-style: none;
+    height: 150px;
+    overflow: auto;
+    width: 75%;
+    scrollbar-width: thin;
+    scrollbar-color: #f05f5f transparent;
+    font-family: 'Prompt', sans-serif;
+}
+
+.containerAPI li {
+    font-size: 14px;
+    font-family: 'Prompt', sans-serif;
+}
+
+.containerAPI::-webkit-scrollbar {
+    width: 20px; 
+}
+
+.containerAPI::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 20px; 
+}
+
+.containerAPI::-webkit-scrollbar-thumb {
+    background-color: red;
+    border-radius: 20px; 
+}
+.formInputAPI{
+    width: 50%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    transition: border-color 0.3s;
+}
