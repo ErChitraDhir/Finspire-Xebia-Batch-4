@@ -43,6 +43,10 @@ const customerSchema = new mongoose.Schema(
       match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
       validate: [isEmail, "Please Enter a valid Email"],
     },
+    emailVerified: {
+      type: Boolean,
+      default: false, // Default to false, indicating email is not verified
+    },
     address: {
       street: {
         type: String,
@@ -74,16 +78,13 @@ const customerSchema = new mongoose.Schema(
       // required: [true, "Please Enter Phone Number"],
       match: /^\d{10}$/,
     },
-
-    // password: {
-    //   type: String,
-    //   required: [true, "Please Enter Password"],
-    //   minlength: [8, "Minimum password length is 8"],
-    // },
   },
   { timestamps: true }
 );
 
-const Customer = mongoose.model("Customer", customerSchema);
+const CustomerPersonelDetails = mongoose.model(
+  "CustomerPersonelDetails",
+  customerSchema
+);
 
-module.exports = Customer;
+module.exports = CustomerPersonelDetails;
