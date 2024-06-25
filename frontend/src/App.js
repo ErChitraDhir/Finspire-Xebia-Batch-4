@@ -1,22 +1,21 @@
 import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
 import AddressForm from "./pages/AddressForm";
-
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import PersonalDetails from "./pages/PersonalDetails"
+import EmploymentDetails from "./pages/EmploymentDetails";
 function App() {
-  const [data, setData] = React.useState(null);
-
-  React.useEffect(() => {
-    fetch("/api")
-      .then((res) => res.json())
-      .then((data) => setData(data.message));
-  }, []);
-
-  return (
-   <>
-   <AddressForm/>
-   </>
-  );
+    return (
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/address-form" element={<AddressForm />} />
+                <Route path="/personal-details" element={< PersonalDetails/>} />
+                <Route path="/employment-details" element={< EmploymentDetails/>} />
+            </Routes>
+        </BrowserRouter>
+    );
 }
 
 export default App;

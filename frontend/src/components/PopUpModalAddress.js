@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import '../assets/PopUpFormAddress.css';
 
-export default function PopUpModalAddress({ show, onClose, initialAddress, resetManualEntryForm, modalSource }) {
+export default function PopUpModalAddress({ show, onClose, initialAddress, resetManualEntryForm, modalSource, updateAddress }) {
     const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm();
 
     useEffect(() => {
@@ -11,21 +11,31 @@ export default function PopUpModalAddress({ show, onClose, initialAddress, reset
         if (resetManualEntryForm) {
             reset();
         } else if (initialAddress) {
-            const addressParts = initialAddress.split(',');
-            if (addressParts.length >= 1) setValue('flatNumber', addressParts[0].trim());
-            if (addressParts.length >= 2) setValue('street', addressParts[1].trim());
-            if (addressParts.length >= 3) setValue('city', addressParts[2].trim());
+            setValue('flatName', initialAddress.flatName || '');
+            setValue('subBuilding', initialAddress.subBuilding || '');
+            setValue('flatNumber', initialAddress.flatNumber || '');
+            setValue('street', initialAddress.street || '');
+            setValue('city', initialAddress.city || '');
+            setValue('postalCode', initialAddress.postalCode || '');
         }
     }, [show, initialAddress, resetManualEntryForm, reset, setValue]);
 
     const onSubmit = (data) => {
-        console.log(data);
+        const newAddress = {
+            flatName: data.flatName,
+            subBuilding: data.subBuilding,
+            flatNumber: data.flatNumber,
+            street: data.street,
+            city: data.city,
+            postalCode: data.postalCode
+        };
+        updateAddress(newAddress);
     };
 
     if (!show) {
         return null;
     }
-    
+
     return (
         <div className="modal" onClick={onClose}>
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -43,9 +53,8 @@ export default function PopUpModalAddress({ show, onClose, initialAddress, reset
                         <input
                             type="text"
                             placeholder="Enter House or Building Name"
-                            {...register('houseName', { required: 'Please enter your house or building name' })}
+                            {...register('flatName')}
                         />
-                        {errors.houseName && <p className="errorMessage">{errors.houseName.message}</p>}
                         
                         <label>Sub Building (Optional)</label>
                         <input
