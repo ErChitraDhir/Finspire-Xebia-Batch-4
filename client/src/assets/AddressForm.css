@@ -1,0 +1,224 @@
+@import url('https://fonts.googleapis.com/css2?family=Prompt:wght@400;600;700&display=swap');
+
+* {
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Prompt', sans-serif;
+    background-color: #f5f5f5;
+}
+
+.container {
+    background-color: #ffffff;
+    max-width: 800px;
+    margin: 60px auto;
+    padding: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.header {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.header2 {
+    font-size: 16px;
+    font-weight: 400;
+    margin-top: 0;
+    color: #666;
+}
+
+.hrline {
+    border: none;
+    height: 2px;
+    background-color: #f05f5f;
+    margin: 20px 0;
+}
+
+.form-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+.sp{
+    font-size: 20px;
+}
+.formInput {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    font-size: 14px;
+    transition: border-color 0.3s;
+}
+
+.formInput:focus {
+    border-color: #f05f5f;
+}
+
+.error {
+    border-color: #f05f5f;
+}
+
+.error-message {
+    color: #f05f5f;
+    font-size: 12px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    font-weight: 500;
+}
+.address-dropdown {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    max-height: 150px;
+    overflow-y: auto;
+    position: absolute;
+    width: 100%;
+    background-color: white;
+    z-index: 1000;
+}
+
+.address-dropdown li {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.address-dropdown li:hover {
+    background-color: #f0f0f0;
+}
+.manual-entry-link {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.manual-entry-button {
+    color: #f05f5f;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+}
+
+.formattedAddressContainer {
+    margin-top: 20px;
+}
+
+.formattedAddress {
+    background-color: #f1f1f1;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    position: relative;
+    width:70%;
+}
+
+.formattedAddress p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+.RemoveAddressButton {
+    color: #f05f5f;
+    font-weight: 700;
+    font-size: 14px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+    position: absolute;
+    left:70%;
+    top:10%;
+}
+.ChangeAddressButton {
+    color: #f05f5f;
+    font-weight: 700;
+    font-size: 14px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    padding: 0;
+}
+
+.dynamicHr {
+    border: none;
+    height: 2px;
+    background-color: #ccc;
+    margin-top: 20px;
+}
+
+.section-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #333;
+    margin-top: 30px;
+}
+
+.section-subtitle {
+    font-size: 14px;
+    font-weight: 400;
+    color: #666;
+    margin-top: 10px;
+}
+
+.radioType {
+    margin-top: 20px;
+}
+
+.radio-option {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.radio-option input {
+    margin-right: 10px;
+}
+
+.confirmation-label {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.confirmation-label input {
+    margin-right: 10px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.CtnBtn {
+    padding: 15px 30px;
+    background-color: #f05f5f;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+}
+
+.CtnBtn:hover {
+    background-color: #e04e4e;
+}
+
