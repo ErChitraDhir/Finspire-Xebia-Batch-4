@@ -1,6 +1,6 @@
 require("dotenv").config();
 var nodemailer = require("nodemailer");
-function sendEmail(to, otp) {
+function sendEmail(to, link) {
   var transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -8,15 +8,15 @@ function sendEmail(to, otp) {
       pass: process.env.EMAILPASSWORD,
     },
   });
-  var str = "your otp = ";
-  var a = otp;
+  var str = "Link to Reset the Password = ";
+  var a = link;
   str += a;
-  str += "\notp valid till 2 min";
+  str += "\nLink valid till 2 min";
   var mailOptions = {
     from: "mayank.tempdata@gmail.com",
     to: to,
     // cc:cc,
-    subject: "Verify Email for Finespire!!",
+    subject: "Reset password for your Finespire Account!!",
     text: str,
   };
 

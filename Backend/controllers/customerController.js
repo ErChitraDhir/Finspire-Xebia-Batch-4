@@ -1,5 +1,8 @@
-const Customer = require("../models/Customer");
+const CustomerPersonelDetails = require("../models/CustomerPersonelDetails");
+const OTP = require("../models/Otp");
+const UserAccount = require("../models/UserAccount");
 const sendMail = require("./Mail");
+const bcrypt = require("bcrypt");
 
 function generateOTP() {
   const min = 100000;
@@ -8,27 +11,39 @@ function generateOTP() {
   return code;
 }
 
+// Submit the personal details for the customer
 const submitPersonalDetails = async (req, res) => {
   try {
-    const customer = new Customer(req.body);
+    let customer = await CustomerPersonelDetails.findOne({
+      email: req.body.email,
+    });
+
+    if (customer) {
+      const otp = await registerEmail(customer.email);
+      return res
+        .status(200)
+        .json({ message: "Customer already exists, OTP sent", customer, otp });
+    }
+
+    customer = new CustomerPersonelDetails(req.body);
     await customer.save();
+
+    const otp = await registerEmail(customer.email);
+
     res
       .status(201)
-      .json({ message: "Customer registered successfully", customer });
+      .json({ message: "Customer registered successfully", customer, otp });
   } catch (error) {
-    if (customer && customer._id) {
-      // If the customer has been saved, delete the entry
-      await Customer.findByIdAndDelete(customer._id);
-    }
     res
       .status(400)
       .json({ message: "Failed to register customer", error: error.message });
   }
 };
 
+// the the customer from the db
 const getCustomer = async (req, res) => {
   try {
-    const customer = await Customer.find(req.params.id);
+    const customer = await CustomerPersonelDetails.find(req.params.id);
     if (!customer) {
       return res.status(404).json({ message: "Customer not found" });
     }
@@ -40,12 +55,17 @@ const getCustomer = async (req, res) => {
   }
 };
 
+// Update the customer details in db
 const updateCustomer = async (req, res) => {
   try {
-    const customer = await Customer.update(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
+    const customer = await CustomerPersonelDetails.update(
+      req.params.id,
+      req.body,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
     if (!customer) {
       return res.status(404).json({ message: "Customer not found" });
     }
@@ -59,14 +79,15 @@ const updateCustomer = async (req, res) => {
   }
 };
 
-const registerEmail = async (req, res) => {
+// Send Email while submitting the personal details
+const registerEmail = async (email) => {
   try {
-    // const customer = await Customer.findOne({ email: req.body.email });
+    // const customer = await CustomerPersonelDetails.findOne({ email: req.body.email });
     // if (!customer) {
     //   return res.status(404).json({ message: "Customer not found" });
     // }
-    const otp = sendOTP(req.body.email);
-    res.status(200).json({ message: "OTP sent successfully", otp });
+    const otp = sendOTPToEmail(email);
+    return otp;
   } catch (error) {
     res
       .status(400)
@@ -74,10 +95,111 @@ const registerEmail = async (req, res) => {
   }
 };
 
-const sendOTP = (email) => {
+// Send OTP to the email
+const sendOTPToEmail = async (email) => {
+  const validityPeriodMinutes = 5;
   const thisotp = generateOTP();
+  const expiresAt = new Date(Date.now() + validityPeriodMinutes * 60000);
+
+  const otp = new OTP({ userId: email, otp: thisotp, expiresAt });
+  await otp.save();
+
   sendMail(email, thisotp);
   return thisotp;
+};
+
+// Verify the OTP send to email
+const verifyOTP = async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+
+    const otpRecord = await OTP.find({ email, otp });
+
+    if (!otpRecord) {
+      return res.status(400).json({ message: "Invalid OTP" });
+    }
+
+    if (otpRecord.expiresAt < new Date()) {
+      return res.status(400).json({ message: "OTP has expired" });
+    }
+
+    // Update hasEmailVerified field to true
+    await CustomerPersonelDetails.updateOne(
+      { email },
+      {
+        $set: {
+          emailVerified: true,
+        },
+      }
+    );
+
+    res.status(200).json({ message: "OTP verified successfully" });
+  } catch (error) {
+    res
+      .status(400)
+      .json({ message: "Failed to verify OTP", error: error.message });
+  }
+};
+
+const RegisterUsernameAccount = async (req, res) => {
+  try {
+    const { email, username, password } = req.body;
+
+    // Check if user already exists
+    const existingUser = await UserAccount.findOne({
+      $or: [{ email }, { username }],
+    });
+    if (existingUser) {
+      return res
+        .status(400)
+        .json({ message: "Email or username already taken" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = new UserAccount({ email, username, password: hashedPassword });
+
+    await user.save();
+
+    res.status(201).json({ message: "User registered successfully", user });
+  } catch (error) {
+    res
+      .status(400)
+      .json({ message: "Failed to register user", error: error.message });
+  }
+};
+
+// Login the user using email
+const LoginUserAccount = async (req, res) => {
+  try {
+    const { username, password } = req.body;
+
+    // Check if user exists
+    const user = await UserAccount.findOne({ username });
+    if (!user) {
+      return res.status(400).json({ message: "Invalid username or password" });
+    }
+
+    // Check if password matches
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (isMatch) {
+      const token = jwt.sign(
+        { _id: user._id, name: user.name, email: user.email },
+        process.env.JWT_LOGIN_TOKEN,
+        {
+          expiresIn: "1d",
+        }
+      );
+
+      res.status(200).json({
+        message: "Login Successful",
+        token,
+      });
+    } else {
+      return res.status(400).json({ message: "Invalid username or password" });
+    }
+  } catch (error) {
+    res.status(400).json({ message: "Failed to login", error: error.message });
+  }
 };
 
 module.exports = {
@@ -85,4 +207,7 @@ module.exports = {
   getCustomer,
   updateCustomer,
   registerEmail,
+  verifyOTP,
+  RegisterUsernameAccount,
+  LoginUserAccount,
 };
