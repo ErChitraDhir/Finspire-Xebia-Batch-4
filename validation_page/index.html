@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Login to Your Account</h2>
+        <form id="loginForm" onsubmit="return validateForm()">
+            <label for="email">Email (must include @gmail.com):</label><br>
+            <input type="email" id="email" name="email" required><br><br>
+            
+            <label for="password">Password (at least one uppercase letter, one number, one special character):</label><br>
+            <input type="password" id="password" name="password" required><br><br>
+            
+            <label for="confirmPassword">Confirm Password:</label><br>
+            <input type="password" id="confirmPassword" name="confirmPassword" required><br><br>
+            
+            <button type="submit">Login</button>
+        </form>
+        <p id="errorText" class="error-text"></p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
