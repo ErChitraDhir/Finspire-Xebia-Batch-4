@@ -8,12 +8,13 @@ function Login() {
     const [errorText, setErrorText] = useState('');
 
     const validateForm = () => {
-        // Reset error message
+    
         setErrorText('');
 
         // Email validation
-        if (!email.endsWith('@gmail.com')) {
-            setErrorText('Email must end with @gmail.com');
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+        if (!email.match(emailRegex)) {
+            setErrorText('Email must be a valid gmail.com address');
             return false;
         }
 
@@ -24,13 +25,13 @@ function Login() {
             return false;
         }
 
-        // Confirm password validation
+    
         if (password !== confirmPassword) {
             setErrorText('Passwords do not match');
             return false;
         }
 
-        // If all validations pass, form submission is allowed
+        
         return true;
     };
 
