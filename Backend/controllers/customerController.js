@@ -13,6 +13,7 @@ function generateOTP() {
 
 // Submit the personal details for the customer
 const submitPersonalDetails = async (req, res) => {
+  console.log(req.body);
   try {
     let customer = await CustomerPersonelDetails.findOne({
       email: req.body.email,

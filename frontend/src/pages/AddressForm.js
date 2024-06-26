@@ -61,7 +61,7 @@ export default function AddressForm() {
         };
         console.log('Request Payload:', JSON.stringify(combinedData, null, 2));
         try {
-            const response = await fetch('http://localhost:3003/api/auth/submitPersonalDetails', {
+            const response = await fetch('http://localhost:4001/customer/submitPersonalDetails', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
