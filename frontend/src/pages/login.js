@@ -47,7 +47,7 @@ function Login() {
         <div className="container">
             <h2>Login to Your Account</h2>
             <form id="loginForm" onSubmit={handleSubmit}>
-                <label htmlFor="email">Email (must include @gmail.com):</label><br />
+                <label htmlFor="email">Email (must include @gmail.com):</label>
                 <input 
                     type="email" 
                     id="email" 
@@ -55,9 +55,9 @@ function Login() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required 
-                /><br /><br />
+                />
 
-                <label htmlFor="password">Password (at least one uppercase letter, one number, one special character):</label><br />
+                <label htmlFor="password">Password (at least one uppercase letter, one number, one special character):</label>
                 <input 
                     type="password" 
                     id="password" 
@@ -65,9 +65,9 @@ function Login() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required 
-                /><br /><br />
+                />
 
-                <label htmlFor="confirmPassword">Confirm Password:</label><br />
+                <label htmlFor="confirmPassword">Confirm Password:</label>
                 <input 
                     type="password" 
                     id="confirmPassword" 
@@ -75,7 +75,7 @@ function Login() {
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     required 
-                /><br /><br />
+                />
 
                 <button type="submit">Login</button>
             </form>
