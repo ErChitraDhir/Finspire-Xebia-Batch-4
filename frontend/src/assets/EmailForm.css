@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=Prompt:wght@400;600;700&display=swap');
+
+* {
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Prompt', sans-serif;
+    background-color: #f5f5f5;
+}
+
+.containerEmail{
+    background-color: #ffffff;
+    max-width: 800px;
+    margin: 60px auto;
+    padding: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    margin-top: 15%;
+}
+
+.header {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.hrline {
+    border: none;
+    height: 2px;
+    background-color: #f05f5f;
+    margin: 20px 0;
+}
+
+.form-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.formInput {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    font-size: 14px;
+    transition: border-color 0.3s;
+}
+
+.formInput:focus {
+    border-color: #f05f5f;
+}
+
+.error {
+    border-color: #f05f5f;
+}
+
+.error-message {
+    color: #f05f5f;
+    font-size: 12px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    font-weight: 500;
+}
+
+.CtnBtn {
+    padding: 15px 30px;
+    background-color: #f05f5f;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.CtnBtn:hover {
+    background-color: #e04e4e;
+}

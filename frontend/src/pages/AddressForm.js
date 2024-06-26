@@ -3,9 +3,8 @@ import "../assets/AddressForm.css";
 import { RiArrowRightWideFill } from "react-icons/ri";
 import { useForm } from "react-hook-form";
 import PopUpModalAddress from "../components/PopUpModalAddress";
-import { useLocation } from "react-router-dom";
+import { useLocation,useNavigate} from "react-router-dom";
 import LoqateAPI from "../components/LoqateAPI";
-
 export default function AddressForm() {
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
     const [formattedAddress, setFormattedAddress] = React.useState({
@@ -16,6 +15,7 @@ export default function AddressForm() {
         city: "",
         postalCode: ""
     });
+    const navigate = useNavigate();
     const [showDropdown, setShowDropdown] = React.useState(true);
     const [showModal, setShowModal] = React.useState(false);
     const [resetManualEntryForm, setResetManualEntryForm] = React.useState(false);
@@ -59,26 +59,9 @@ export default function AddressForm() {
             hasLivedLessThan6Months: data.duration,
             confirmation: data.confirmation
         };
-        console.log('Request Payload:', JSON.stringify(combinedData, null, 2));
-        try {
-            const response = await fetch('http://localhost:4001/customer/submitPersonalDetails', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(combinedData),
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to register customer');
-            }
-
-            const result = await response.json();
-            console.log(result);
-
-        } catch (error) {
-            console.error('Error:', error);
-        }
+        // console.log('Request Payload:', JSON.stringify(combinedData, null, 2));
+        console.log(combinedData)
+        navigate('/email-verification', { state: combinedData })
     };
 
     const openModal = (evt, source) => {
