@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import "../assets/Login.css";
 import { useLocation, useNavigate } from "react-router-dom";
 
-function Login() {
+function ForgotPassword() {
   const {
     register,
     handleSubmit,
@@ -12,16 +12,12 @@ function Login() {
   } = useForm();
   const location = useLocation();
   const navigate = useNavigate();
-  
-  const sendToForgot=async ()=>{
-    navigate("/forgot/password");
-  };
 
   const onSubmit = async (data) => {
     console.log("Form submitted:", data);
     try {
       const response = await fetch(
-        "http://localhost:4001/customer/login/account",
+        "http://localhost:4001/customer/forgot/account",
         {
           method: "POST",
           headers: {
@@ -33,10 +29,10 @@ function Login() {
       console.log("response : ", response.status);
       if (response.status === 200) {
         const result = await response.json();
-        console.log("Logged in ! : ", result.message);
-        navigate("/otp-validation");
+        console.log("Email Sent Checkit ! : ", result.message);
+        // navigate("/");
       } else {
-        throw new Error("Failed to verify OTP");
+        throw new Error("Failed to send Email");
       }
     } catch (error) {
       console.error("Error:", error);
@@ -46,7 +42,7 @@ function Login() {
   return (
     <div className="login-body">
       <div className="containerLogin">
-        <h2>Login to Your Account</h2>
+        <h2>Recover Password of you Account!</h2>
         <form id="loginForm" onSubmit={handleSubmit(onSubmit)}>
           <label htmlFor="email">Enter your registered Email </label>
           <input
@@ -62,31 +58,11 @@ function Login() {
             })}
           />
           {errors.email && <p className="error-text">{errors.email.message}</p>}
-
-          <label htmlFor="password">Enter your password</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            {...register("password", {
-              required: "Password is required",
-              pattern: {
-                value:
-                  /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{8,}$/,
-                message:
-                  "Password must contain at least one uppercase letter, one number, and one special character",
-              },
-            })}
-          />
-          {errors.password && (
-            <p className="error-text">{errors.password.message}</p>
-          )}
-          <button type="submit">Login</button>
+          <button type="submit">Submit</button>
         </form>
-          <button onClick={sendToForgot}>Forgot Password?</button>
       </div>
     </div>
   );
 }
 
-export default Login;
+export default ForgotPassword;

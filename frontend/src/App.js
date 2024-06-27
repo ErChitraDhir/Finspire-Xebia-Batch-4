@@ -10,6 +10,7 @@ import OTP from "./pages/Rgister_OTP_page.js"
 import LoginOTP from "./pages/Login_OTP_page.js"
 import Login from "./pages/Login"
 import Register from "./pages/Register"
+import ForgotPassword from "./pages/ForgotPassword"
 function App() {
     return (
         <BrowserRouter>
@@ -23,6 +24,7 @@ function App() {
                 <Route path="/otp-validation-page" element={< LoginOTP/>} />
                 <Route path="/login" element={< Login/>} />
                 <Route path="/register" element={< Register/>} />
+                <Route path="/forgot/password" element={< ForgotPassword/>} />
             </Routes>
         </BrowserRouter>
     );

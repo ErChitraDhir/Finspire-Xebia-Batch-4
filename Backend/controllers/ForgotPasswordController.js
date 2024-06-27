@@ -28,42 +28,52 @@ const deleteOTPForEmail = (email) => {
   });
 };
 
+function generateRandomString(email) {
+  // Generate a random number between 15 and 20 for the string length
+  const length = Math.floor(Math.random() * 6) + 155;
+
+  // Generate a random string of the specified length
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let randomString = "";
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    randomString += characters[randomIndex];
+  }
+
+  // Use part of the email to ensure uniqueness
+  const emailPart = email.split("@")[0].slice(0, 5);
+
+  // Concatenate the random string with the email part
+  return `${randomString}${emailPart}`;
+}
+
 const sendForgotEmail = async (req, res) => {
   try {
-    const users = await UserAccount.find({ email: req.body.email });
-
+    const users = await UserAccount.find({ email: req.body.data.email });
     if (users.length === 0) {
       console.log("user does not exist with this email at forgot password");
-      return res.json({ msg: "user does not exist with this email" });
+      return res.status(400).json({ msg: "user does not exist with this email" });
     } else {
-      var email = req.body.email;
+      var email = req.body.data.email;
       await OTP.deleteMany({ userId: email });
-      // await deleteOTPForEmail(req.body.email);
-
-      //   setTimeout(async function () {
-      //     console.log("timeout (2min)");
-      //     await deleteOTPForEmail(email);
-      //   }, 2 * 60000);
-
-      const thisuser = await UserAccount.find({ email: req.body.email });
-      var thisuser_id_temp = thisuser[0]._id;
-      var thisuser_id = thisuser_id_temp.toString(); // Convert the ObjectId to a string
-      console.log(thisuser_id);
+      
+      var thisuser_id = generateRandomString(email); // Convert the ObjectId to a string
       var url = "http://localhost:5173/reset/password/";
       url += thisuser_id;
       var otp = new OTP({
         otp: thisuser_id,
-        userId: req.body.email,
+        userId: req.body.data.email,
       });
       console.log("otp =", otp);
 
       await otp.save();
       ForgotMail(otp.userId, url);
-      return res.status(201).json({ message: "all ok otp has been sent" });
+      return res.status(200).json({ message: "all ok otp has been sent" });
     }
   } catch (err) {
     console.error("Error:", err);
-    return res.json({ msg: "some error!" });
+    return res.status(400).json({ msg: "some error!" });
   }
 };
 
@@ -76,7 +86,7 @@ const changePasswordFromEmail = async (req, res) => {
       return res.json({ msg: "Time to reset password is over!!" });
     }
 
-    const user = await UserAccount.findOne({ _id: id });
+    const user = await UserAccount.findOne({ email: thisotp.userId });
     if (!user) {
       return res.json({ msg: "User does not exist with this email!!" });
     }
@@ -91,13 +101,13 @@ const changePasswordFromEmail = async (req, res) => {
 
     console.log(updateUser);
     if (updateUser) {
-      return res.json({ message: "Password updated Successfully!!" });
+      return res.status(200).json({ message: "Password updated Successfully!!" });
     } else {
-      return res.json({ msg: "Something went wrong" });
+      return res.status(201).json({ msg: "Something went wrong" });
     }
   } catch (err) {
     console.error("Error:", err);
-    return res.json({ msg: "Something went wrong" });
+    return res.status(400).json({ msg: "Something went wrong" });
   }
 };
 
