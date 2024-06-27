@@ -1,32 +1,35 @@
 import React from "react";
 import "../assets/EmailForm.css";
 import { useForm } from "react-hook-form";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
-export default function OTP_Page() {
+export default function Register_OTP_page() {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const location = useLocation();
+    const navigate = useNavigate();
     const email = location.state.email;
 
     const onSubmit = async (data) => {
-        // try {
-        //     const response = await fetch('http://localhost:4001/customer/verifyOTP', {
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //         },
-        //         body: JSON.stringify({ email, otp: data.OTP }),
-        //     });
+        try {
+            const response = await fetch('http://localhost:4001/customer/verify/email/otp', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, otp: data.OTP }),
+            });
+            console.log("response : ", response.status);
+            if (response.status==200) {
+                const result = await response.json();
+                console.log("registered ! : ", result.message);
+                navigate('/register');
+            }else{
+                throw new Error('Failed to verify OTP');
+            }
 
-        //     if (!response.ok) {
-        //         throw new Error('Failed to verify OTP');
-        //     }
-
-        //     const result = await response.json();
-        //     console.log(result);
-            
-        //     console.error('Error:', error);
-        // }
+        } catch (error) {
+            console.error('Error:', error);
+        }
     };
 
     return (

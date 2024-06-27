@@ -40,30 +40,34 @@ const customerSchema = new mongoose.Schema(
       required: [true, "Please Enter Email"],
       unique: true,
       lowercase: true,
-      match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-      validate: [isEmail, "Please Enter a valid Email"],
     },
     emailVerified: {
       type: Boolean,
       default: false, // Default to false, indicating email is not verified
     },
     address: {
+      flatName: {
+        type: String,
+        required: [true, "Please Enter Flat Name"],
+      },
+      subBuilding: {
+        type: String,
+      },
+      flatNumber: {
+        type: String,
+        required: [true, "Please Enter Flat Number"],
+      },
       street: {
         type: String,
-        required: [true, "Please Enter Address"],
+        required: [true, "Please Enter Street"],
       },
       city: {
         type: String,
         required: [true, "Please Enter City"],
       },
-      state: {
+      postalCode: {
         type: String,
-        required: [true, "Please Enter State"],
-      },
-      zip: {
-        type: String,
-        required: [true, "Please Enter Zip Code"],
-        match: /^\d{5}$/,
+        required: [true, "Please Enter Postal Code"],
       },
     },
     hasLivedLessThan6Months: {

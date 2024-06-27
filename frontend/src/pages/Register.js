@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import "../assets/Login.css";
 import { useLocation, useNavigate } from "react-router-dom";
 
-function Login() {
+function Register() {
   const {
     register,
     handleSubmit,
@@ -17,7 +17,7 @@ function Login() {
     console.log("Form submitted:", data);
     try {
       const response = await fetch(
-        "http://localhost:4001/customer/login/account",
+        "http://localhost:4001/customer/register/account",
         {
           method: "POST",
           headers: {
@@ -29,8 +29,12 @@ function Login() {
       console.log("response : ", response.status);
       if (response.status === 200) {
         const result = await response.json();
-        console.log("Logged in ! : ", result.message);
-        navigate("/otp-validation");
+        console.log("registered ! : ", result.message);
+        navigate("/employment-details");
+    }else if (response.status === 201) {
+        const result = await response.json();
+        console.log("already registered ! : ", result.message);
+        navigate("/employment-details");
       } else {
         throw new Error("Failed to verify OTP");
       }
@@ -44,7 +48,7 @@ function Login() {
       <div className="containerLogin">
         <h2>Login to Your Account</h2>
         <form id="loginForm" onSubmit={handleSubmit(onSubmit)}>
-          <label htmlFor="email">Enter your registered Email </label>
+          <label htmlFor="email">Create User Login Password </label>
           <input
             type="email"
             id="email"
@@ -77,6 +81,21 @@ function Login() {
           {errors.password && (
             <p className="error-text">{errors.password.message}</p>
           )}
+
+          <label htmlFor="confirmPassword">Confirm Password:</label>
+          <input
+            type="password"
+            id="confirmPassword"
+            name="confirmPassword"
+            {...register("confirmPassword", {
+              required: "Password is required",
+              validate: (value) =>
+                value === watch("password") || "Passwords do not match",
+            })}
+          />
+          {errors.confirmPassword && (
+            <p className="error-text">{errors.confirmPassword.message}</p>
+          )}
           <button>Forgot Password?</button>
           <button type="submit">Register</button>
         </form>
@@ -85,4 +104,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Register;

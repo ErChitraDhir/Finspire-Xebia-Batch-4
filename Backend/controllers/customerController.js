@@ -1,8 +1,10 @@
 const CustomerPersonelDetails = require("../models/CustomerPersonelDetails");
 const OTP = require("../models/Otp");
 const UserAccount = require("../models/UserAccount");
+const EmploymentDetails = require("../models/EmploymentDetails");
 const sendMail = require("./Mail");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 function generateOTP() {
   const min = 100000;
@@ -15,8 +17,41 @@ function generateOTP() {
 const submitPersonalDetails = async (req, res) => {
   console.log(req.body);
   try {
+    const {
+      name: { firstName, middleName, lastName },
+      dateOfBirth,
+      address: { flatName, subBuilding, flatNumber, street, city, postalCode },
+      hasLivedLessThan6Months,
+      confirmation,
+      email,
+    } = req.body;
+
+    // Transforming data to match the model
+    const customerData = {
+      name: {
+        first: firstName,
+        middle: middleName,
+        last: lastName,
+      },
+      dateOfBirth: {
+        day: new Date(dateOfBirth).getUTCDate(),
+        month: new Date(dateOfBirth).getUTCMonth() + 1,
+        year: new Date(dateOfBirth).getUTCFullYear(),
+      },
+      email,
+      address: {
+        flatName: flatName,
+        subBuilding: subBuilding,
+        flatNumber: flatNumber,
+        street: street,
+        city: city,
+        postalCode: postalCode,
+      },
+      hasLivedLessThan6Months: true,
+    };
+
     let customer = await CustomerPersonelDetails.findOne({
-      email: req.body.email,
+      email: customerData.email,
     });
 
     if (customer) {
@@ -26,7 +61,7 @@ const submitPersonalDetails = async (req, res) => {
         .json({ message: "Customer already exists, OTP sent", customer, otp });
     }
 
-    customer = new CustomerPersonelDetails(req.body);
+    customer = new CustomerPersonelDetails(customerData);
     await customer.save();
 
     const otp = await registerEmail(customer.email);
@@ -113,10 +148,11 @@ const sendOTPToEmail = async (email) => {
 const verifyOTP = async (req, res) => {
   try {
     const { email, otp } = req.body;
-
-    const otpRecord = await OTP.find({ email, otp });
-
+    const otpRecord = await OTP.findOne({ userId: email });
     if (!otpRecord) {
+      return res.status(400).json({ message: "Not registered" });
+    }
+    if (otpRecord.otp != otp) {
       return res.status(400).json({ message: "Invalid OTP" });
     }
 
@@ -136,6 +172,7 @@ const verifyOTP = async (req, res) => {
 
     res.status(200).json({ message: "OTP verified successfully" });
   } catch (error) {
+    console.log("Failed to verify OTP");
     res
       .status(400)
       .json({ message: "Failed to verify OTP", error: error.message });
@@ -144,24 +181,23 @@ const verifyOTP = async (req, res) => {
 
 const RegisterUsernameAccount = async (req, res) => {
   try {
-    const { email, username, password } = req.body;
-
+    const { email, password } = req.body.data;
     // Check if user already exists
     const existingUser = await UserAccount.findOne({
-      $or: [{ email }, { username }],
+      email,
     });
     if (existingUser) {
       return res
-        .status(400)
+        .status(201)
         .json({ message: "Email or username already taken" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = new UserAccount({ email, username, password: hashedPassword });
+    const user = new UserAccount({ email, password: hashedPassword });
 
     await user.save();
 
-    res.status(201).json({ message: "User registered successfully", user });
+    res.status(200).json({ message: "User registered successfully", user });
   } catch (error) {
     res
       .status(400)
@@ -171,11 +207,12 @@ const RegisterUsernameAccount = async (req, res) => {
 
 // Login the user using email
 const LoginUserAccount = async (req, res) => {
-  try {
-    const { username, password } = req.body;
+  if (true) {
+    const { email, password } = req.body.data;
+    console.log(email, password);
 
     // Check if user exists
-    const user = await UserAccount.findOne({ username });
+    const user = await UserAccount.findOne({ email });
     if (!user) {
       return res.status(400).json({ message: "Invalid username or password" });
     }
@@ -190,6 +227,7 @@ const LoginUserAccount = async (req, res) => {
           expiresIn: "1d",
         }
       );
+      const otp = await registerEmail(email);
 
       res.status(200).json({
         message: "Login Successful",
@@ -198,8 +236,26 @@ const LoginUserAccount = async (req, res) => {
     } else {
       return res.status(400).json({ message: "Invalid username or password" });
     }
+  }
+  // catch (error) {
+  //   res.status(400).json({ message: "Failed to login", error: error.message });
+  // }
+};
+
+// EmploymentDetails
+const SubmitEmployment = async (req, res) => {
+  try {
+    const data = req.body;
+    const user = new EmploymentDetails({ email,data });
+    await user.save();
+    res
+      .status(201)
+      .json({
+        message: "Employment Details Added successfully",
+        document: user,
+      });
   } catch (error) {
-    res.status(400).json({ message: "Failed to login", error: error.message });
+    res.status(500).json({ message: "Error adding document", error });
   }
 };
 
@@ -211,4 +267,5 @@ module.exports = {
   verifyOTP,
   RegisterUsernameAccount,
   LoginUserAccount,
+  SubmitEmployment,
 };
