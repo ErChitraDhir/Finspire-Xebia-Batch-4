@@ -1,0 +1,75 @@
+:root {
+  --black: #000000;
+  --white: #ffffff;
+  --green: #00643e;
+  --beige: #cfccb8;
+  --gray: #ccc;
+}
+
+.dropzone {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 360px;
+  border: 4px dashed #ccc;
+  padding: 20px;
+}
+.dnd {
+  font-size: 24px;
+  color: #333;
+  padding: 50px;
+}
+.dnd-btn {
+  background-color: var(--green);
+  color: var(--beige);
+  font-size: 15px;
+  border-radius: 10px;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+}
+.dropdown-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.dropdown {
+  width: 200px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  color: #333;
+  cursor: pointer;
+}
+.uploads {
+  border: 1px solid #ccc;
+  padding: 20px;
+  margin: 20px;
+}
+
+.uploads ul {
+  list-style: none;
+  padding: 0;
+}
+
+.uploads li {
+  margin-bottom: 5px;
+}
+
+.actions {
+  margin-top: 10px;
+}
+
+.actions button {
+  padding: 10px 20px;
+  background-color: var(--green);
+  color: var(--beige);
+  font-size: 15px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-right: 10px;
+}
