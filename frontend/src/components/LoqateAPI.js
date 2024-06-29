@@ -38,7 +38,7 @@ const LoqateAPI = ({ onSelectAddress }) => {
 
     const handleSuggestionClick = async (suggestion) => {
         try {
-            const response = await axios.get(`https://api.addressy.com/Capture/Interactive/Retrieve/v1.00/json3.ws`, {
+            const response = await axios.get(`https://api.addressy.com/Capture/Interactive/Retrieve/v1.2/json3.ws`, {
                 params: {
                     Key: 'NE98-KY68-YR34-WB91', 
                     Id: suggestion.Id
