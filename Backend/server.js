@@ -1,6 +1,8 @@
 const express = require("express");
 const { mongoose } = require("mongoose");
 const cors = require("cors");
+const session = require("express-session");
+const cookieParser = require("cookie-parser");
 
 const customerRoutes = require("./routes/customerRoutes");
 require("dotenv").config();
@@ -19,7 +21,18 @@ const corsOptions ={
 app.use(cors(corsOptions));
 
 app.use(express.json());
-
+app.use(cookieParser());
+app.use(
+  session({
+    secret: "bankingApplication",
+    resave: true,
+    saveUninitialized: true,
+    cookie: {
+      maxAge: 24 * 60 * 60 * 1000, //1 day
+      httpOnly: false, 
+    },
+  })
+);
 try {
   mongoose.connect(process.env.MONGODB_URI);
   console.log("MongoDB connected...");

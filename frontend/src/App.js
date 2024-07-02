@@ -1,31 +1,79 @@
-import React from "react";
-import "./App.css";
-import AddressForm from "./pages/AddressForm";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import React, { useState } from "react";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Home from "./pages/Home";
-import PersonalDetails from "./pages/PersonalDetails"
+import AddressForm from "./pages/AddressForm";
+import PersonalDetails from "./pages/PersonalDetails";
 import EmploymentDetails from "./pages/EmploymentDetails";
-import Email from "./pages/EmailForm"
-import OTP from "./pages/Rgister_OTP_page.js"
-import LoginOTP from "./pages/Login_OTP_page.js"
-import Login from "./pages/Login"
-import Register from "./pages/Register"
-import ForgotPassword from "./pages/ForgotPassword"
+import Email from "./pages/EmailForm";
+import OTP from "./pages/Rgister_OTP_page";
+import LoginOTP from "./pages/Login_OTP_page";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import ForgotPassword from "./pages/ForgotPassword";
+import PrivacyAndSecurity from "./pages/PrivacyAndSecurity";
+import ChangePassword from "./pages/ChangePassword";
+import ProgressBar from "./components/ProgressBar";
+import HomePage from "./pages/HomePage_After_Login";
+import "./App.css";
+
+const AppContent = () => {
+    const location = useLocation();
+    const [personalFormsCompleted, setPersonalFormsCompleted] = useState(0);
+    const [emailFormsCompleted, setEmailFormsCompleted] = useState(0);
+    const [finalDetailsformsCompleted, setAuthFormsCompleted] = useState(0);
+
+    const totalPersonalForms = 2; // PersonalDetails and AddressForm
+    const totalEmailForms = 3; // EmailForm and OTP
+    const totalFinalDetailsForms = 2; // Register and Login
+
+    const incrementPersonalForms = () => setPersonalFormsCompleted(prev => prev + 1);
+    const incrementEmailForms = () => setEmailFormsCompleted(prev => prev + 1);
+    const incrementFinalDetailsForms = () => setAuthFormsCompleted(prev => prev + 1);
+
+    return (
+        <>
+            {location.pathname !== "/" && location.pathname !== "/homepage/privacy-and-security" && location.pathname !== "/homepage/privacy-and-security/change-password" &&location.pathname !== "/login" &&location.pathname !== "/homepage" && (
+                <div className="progress-bars">
+                    <ProgressBar 
+                        title="Personal details" 
+                        completedForms={personalFormsCompleted} 
+                        totalForms={totalPersonalForms} 
+                    />
+                    <ProgressBar 
+                        title="Account Details" 
+                        completedForms={emailFormsCompleted} 
+                        totalForms={totalEmailForms} 
+                    />
+                    <ProgressBar 
+                        title="Final Details" 
+                        completedForms={finalDetailsformsCompleted} 
+                        totalForms={totalFinalDetailsForms} 
+                    />
+                </div>
+            )}
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/address-form" element={<AddressForm onComplete={incrementPersonalForms} />} />
+                <Route path="/personal-details" element={<PersonalDetails onComplete={incrementPersonalForms} />} />
+                <Route path="/employment-details" element={<EmploymentDetails />} />
+                <Route path="/email-verification" element={<Email onComplete={incrementEmailForms} />} />
+                <Route path="/otp-validation" element={<OTP onComplete={incrementEmailForms} />} />
+                <Route path="/otp-validation-page" element={<LoginOTP />} />
+                <Route path="/login" element={<Login onComplete={incrementFinalDetailsForms} />} />
+                <Route path="/register" element={<Register onComplete={incrementEmailForms} />} />
+                <Route path="/forgot/password" element={<ForgotPassword />} />
+               <Route path="/homepage" element={<HomePage />} />
+               <Route path="/:userId/privacy-and-security" element={<PrivacyAndSecurity />} />
+               <Route path="/:userId/privacy-and-security/change-password" element={<ChangePassword />} />
+            </Routes>
+        </>
+    );
+};
+
 function App() {
     return (
         <BrowserRouter>
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/address-form" element={<AddressForm />} />
-                <Route path="/personal-details" element={< PersonalDetails/>} />
-                <Route path="/employment-details" element={< EmploymentDetails/>} />
-                <Route path="/email-verification" element={< Email/>} />
-                <Route path="/otp-validation" element={< OTP/>} />
-                <Route path="/otp-validation-page" element={< LoginOTP/>} />
-                <Route path="/login" element={< Login/>} />
-                <Route path="/register" element={< Register/>} />
-                <Route path="/forgot/password" element={< ForgotPassword/>} />
-            </Routes>
+            <AppContent />
         </BrowserRouter>
     );
 }

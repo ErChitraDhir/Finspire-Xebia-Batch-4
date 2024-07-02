@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import PopUpModalAddress from "../components/PopUpModalAddress";
 import { useLocation,useNavigate} from "react-router-dom";
 import LoqateAPI from "../components/LoqateAPI";
-export default function AddressForm() {
+export default function AddressForm({onComplete}) {
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
     const [formattedAddress, setFormattedAddress] = React.useState({
         flatName: "",
@@ -61,6 +61,7 @@ export default function AddressForm() {
         };
         // console.log('Request Payload:', JSON.stringify(combinedData, null, 2));
         console.log(combinedData)
+        if (onComplete) onComplete(); 
         navigate('/email-verification', { state: combinedData })
     };
 

@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import "../assets/Login.css";
 import { useLocation, useNavigate } from "react-router-dom";
 
-function Register() {
+function Register({onComplete}) {
   const {
     register,
     handleSubmit,
@@ -30,10 +30,12 @@ function Register() {
       if (response.status === 200) {
         const result = await response.json();
         console.log("registered ! : ", result.message);
+        if (onComplete) onComplete(); 
         navigate("/employment-details");
     }else if (response.status === 201) {
         const result = await response.json();
         console.log("already registered ! : ", result.message);
+        if (onComplete) onComplete(); 
         navigate("/employment-details");
       } else {
         throw new Error("Failed to verify OTP");

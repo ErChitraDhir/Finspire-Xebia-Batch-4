@@ -228,7 +228,7 @@ const LoginUserAccount = async (req, res) => {
         }
       );
       const otp = await registerEmail(email);
-
+      req.session.user = { id: user.userId, email: req.body.email };
       res.status(200).json({
         message: "Login Successful",
         token,

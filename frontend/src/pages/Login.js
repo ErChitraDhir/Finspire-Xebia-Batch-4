@@ -28,13 +28,14 @@ function Login() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ data }),
+           credentials: "include",
         }
       );
       console.log("response : ", response.status);
       if (response.status === 200) {
         const result = await response.json();
         console.log("Logged in ! : ", result.message);
-        navigate("/otp-validation");
+        navigate("/homepage");
       } else {
         throw new Error("Failed to verify OTP");
       }
