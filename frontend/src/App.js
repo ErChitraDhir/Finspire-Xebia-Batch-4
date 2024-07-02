@@ -11,6 +11,10 @@ import LoginOTP from "./pages/Login_OTP_page.js"
 import Login from "./pages/Login"
 import Register from "./pages/Register"
 import ForgotPassword from "./pages/ForgotPassword"
+import Dashboard from "./pages/Dashboard"
+import Statements from "./pages/Statements"
+
+
 function App() {
     return (
         <BrowserRouter>
@@ -25,6 +29,8 @@ function App() {
                 <Route path="/login" element={< Login/>} />
                 <Route path="/register" element={< Register/>} />
                 <Route path="/forgot/password" element={< ForgotPassword/>} />
+                <Route path="/dashboard" element={< Dashboard/>} />
+                <Route path="/dashboard/statement" element={< Statements/>} />
             </Routes>
         </BrowserRouter>
     );

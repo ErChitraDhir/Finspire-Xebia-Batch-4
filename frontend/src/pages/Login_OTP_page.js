@@ -22,7 +22,7 @@ export default function Register_OTP_page() {
             if (response.status==200) {
                 const result = await response.json();
                 console.log("registered ! : ", result.message);
-                navigate('/register');
+                navigate('/dashboard');
             }else{
                 throw new Error('Failed to verify OTP');
             }
