@@ -3,7 +3,7 @@ import "../assets/EmailForm.css";
 import { useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom";
 
-export default function EmailForm() {
+export default function EmailForm({onComplete}) {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const location = useLocation();
     const formData = location.state;
@@ -30,6 +30,7 @@ export default function EmailForm() {
 
             const result = await response.json();
             console.log(result);
+            if (onComplete) onComplete(); 
             navigate('/otp-validation', { state: { email: combinedData.email } });
         } catch (error) {
             console.error('Error:', error);

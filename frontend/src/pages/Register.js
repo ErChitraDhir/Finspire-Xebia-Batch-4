@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import "../assets/Login.css";
 import { useLocation, useNavigate } from "react-router-dom";
 
-function Register() {
+function Register({onComplete}) {
   const {
     register,
     handleSubmit,
@@ -30,10 +30,12 @@ function Register() {
       if (response.status === 200) {
         const result = await response.json();
         console.log("registered ! : ", result.message);
+        if (onComplete) onComplete();   
         navigate("/employment-details");
     }else if (response.status === 201) {
         const result = await response.json();
         console.log("already registered ! : ", result.message);
+        if (onComplete) onComplete();   
         navigate("/employment-details");
       } else {
         throw new Error("Failed to verify OTP");
@@ -46,9 +48,9 @@ function Register() {
   return (
     <div className="login-body">
       <div className="containerLogin">
-        <h2>Login to Your Account</h2>
+        <h2>Registration</h2>
         <form id="loginForm" onSubmit={handleSubmit(onSubmit)}>
-          <label htmlFor="email">Create User Login Password </label>
+          <label htmlFor="email">Enter your verified email address </label>
           <input
             type="email"
             id="email"
@@ -96,7 +98,6 @@ function Register() {
           {errors.confirmPassword && (
             <p className="error-text">{errors.confirmPassword.message}</p>
           )}
-          <button>Forgot Password?</button>
           <button type="submit">Register</button>
         </form>
       </div>

@@ -3,7 +3,7 @@ import "../assets/EmailForm.css";
 import { useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom";
 
-export default function Register_OTP_page() {
+export default function Register_OTP_page({onComplete}) {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const location = useLocation();
     const navigate = useNavigate();
@@ -22,6 +22,7 @@ export default function Register_OTP_page() {
             if (response.status==200) {
                 const result = await response.json();
                 console.log("registered ! : ", result.message);
+                if (onComplete) onComplete(); 
                 navigate('/register');
             }else{
                 throw new Error('Failed to verify OTP');

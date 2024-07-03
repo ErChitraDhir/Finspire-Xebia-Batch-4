@@ -1,15 +1,46 @@
 import React, { useState } from 'react';
 import "../assets/EmploymentDetails.css";
-
-const EmploymentDetails = () => {
+import { useForm } from 'react-hook-form';
+const EmploymentDetails = ({onComplete}) => {
   const [employmentStatus, setEmploymentStatus] = useState('');
   const [activeButton, setActiveButton] = useState('');
-
+  const { register, handleSubmit, formState: { errors } } = useForm(); 
   const handleStatusClick = (status) => {
     setEmploymentStatus(status);
     setActiveButton(status);
   };
+  const onSubmit = async(data) => {
+    if (!employmentStatus) {
+      alert('Please select your employment status.');
+      return
+    }
+    console.log(data);
+    data.employmentStatus = employmentStatus;
 
+    try {
+      const response = await fetch('http://localhost:4001/customer/employment-details', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log('Employment details saved:', result);
+        if (onComplete) {
+          onComplete(); // Call parent component's onComplete function if provided
+        }
+      } else {
+        throw new Error('Failed to save employment details.');
+      }
+    } catch (error) {
+      console.error('Error saving employment details:', error);
+      // Handle error gracefully (e.g., show error message to user)
+    }
+  
+  };
   
   const renderAdditionalQuestions = () => {
     switch (employmentStatus) {
@@ -240,6 +271,7 @@ const EmploymentDetails = () => {
 
 
   return (
+    <form onSubmit={handleSubmit(onSubmit)}>
     <div className="employment-container">
       <h3 className="employment-header"><span className="employment-header">07 </span>Employment details</h3>
       <div>
@@ -262,6 +294,7 @@ const EmploymentDetails = () => {
         <button className="CtnBtn">Continue</button>
       </div>
     </div>
+    </form>
   );
 };
 

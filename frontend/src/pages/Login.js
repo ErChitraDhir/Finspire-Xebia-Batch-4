@@ -2,7 +2,8 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import "../assets/Login.css";
 import { useLocation, useNavigate } from "react-router-dom";
-
+import { isLogin, setAuthentication } from "../utils/auth";
+import {jwtDecode} from "jwt-decode"
 function Login() {
   const {
     register,
@@ -34,7 +35,12 @@ function Login() {
       if (response.status === 200) {
         const result = await response.json();
         console.log("Logged in ! : ", result.message);
-        navigate("/otp-validation");
+        // navigate("/otp-validation");
+        setAuthentication(result.token);
+        // navigate("/otp-validation");
+        const decodedToken = jwtDecode(result.token);
+        const userId = decodedToken._id;
+        navigate(`/${userId}/dashboard`);
       } else {
         throw new Error("Failed to verify OTP");
       }

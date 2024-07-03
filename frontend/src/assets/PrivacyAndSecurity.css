@@ -1,0 +1,119 @@
+@import url('https://fonts.googleapis.com/css2?family=Prompt:wght@400;600;700&display=swap');
+
+* {
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Prompt', sans-serif;
+    background-color: #f5f5f5;
+}
+
+.privacy-security-content h2 {
+    font-size: 30px;
+    font-weight: 800;
+    margin-bottom: 10px;
+    margin: 10px;
+}
+
+.privacy-security-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.hrline1 {
+    border: none;
+    height: 2px;
+    background-color: f05f5f;
+    margin: 20px 0;
+    width:60%;
+}
+
+.back-button {
+    background-color: transparent;
+    border: none;
+    color: #f05f5f;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 10px 20px;
+    margin: 20px 0;
+    margin-left: 20px;
+    text-decoration: underline;
+    display: flex;
+    align-items: center;
+    align-self: flex-start;
+}
+
+.back-button .icon {
+    margin-right: 5px;
+}
+
+.privacy-security-container {
+    background-color: #ffffff;
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding-bottom: 20px;
+    min-height: 100vh;
+    position: relative;
+}
+
+.privacy-security-content {
+    text-align: center;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.section {
+    cursor: pointer;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 20px;
+    margin: 10px 0;
+    position: relative;
+    transition: border-color 0.3s;
+    width: 60%;
+}
+
+.section:hover {
+    border-color: #f05f5f;
+}
+
+.section h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.section p {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.section-icon {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 24px;
+    color: #f05f5f;
+}
+.WlcmUser {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap:3px;
+    position: absolute;
+    bottom: 20px; 
+    right: 50px;  
+    font-size: 17.5px;
+    color: #000000;
+    font-weight:500 ;
+}

@@ -1,0 +1,37 @@
+@import url('https://fonts.googleapis.com/css2?family=Prompt:wght@400;600;700&display=swap');
+.progress-container {
+    width: 100%;
+    /* min-height: 50px; */
+    font-family: 'Prompt', sans-serif;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.progress {
+    flex: 1;
+    height: 4px;
+    background-color: #e0e0df;
+    border-radius: 2px;
+    overflow: hidden;
+    margin-right: 10px;
+    margin-bottom: 15px;
+}
+
+.progress-bar {
+    height: 100%;
+    background-color: #f05f5f;
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+.progress-title {
+    flex-shrink: 0;
+    text-align: center;
+    font-weight:400 ;
+    font-size: 14px;
+    position: absolute;
+    top:50%;
+    left: 35%;
+}
