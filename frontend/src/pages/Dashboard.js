@@ -1,9 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { isLogin, setAuthentication } from "../utils/auth";
 
 const Dashboard = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const [user, setUser] = useState({ email: "" });
 
   const navigate = useNavigate();
 
@@ -16,12 +18,24 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
+    const authenticate = async () => {
+      const loggedIn = await isLogin();
+      console.log("loggedIn", loggedIn);
+
+      if (loggedIn.auth) {
+        setUser(loggedIn.data);
+      } else {
+        navigate("/login");
+      }
+    };
+
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsDropdownOpen(false);
       }
     };
 
+    authenticate();
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
