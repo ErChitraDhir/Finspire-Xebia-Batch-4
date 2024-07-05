@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { isLogin, getEmail } from "../utils/auth";
 import { useParams } from "react-router-dom";
-import {jwtDecode} from "jwt-decode"
+import { jwtDecode } from "jwt-decode";
 
 const Dashboard = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -17,6 +17,17 @@ const Dashboard = () => {
   };
   const navigateToPrivacy = async () => {
     navigate(`/${userId}/privacy-and-security`);
+  };
+  const getStatementOnEmail = async () => {
+    const response = await fetch(
+      `http://localhost:4001/customer/transactions/${userEmail}/statement/july/pdf`
+    );
+    const data = await response.json();
+    console.log(response);
+    if(response.status==200){
+      alert("Statement sent to your email");
+    }
+
   };
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -54,7 +65,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     const getTransaction = async () => {
-      const tempEmail=getEmail();
+      const tempEmail = getEmail();
       setUser(tempEmail);
       if (tempEmail) {
         const response = await fetch(
@@ -188,8 +199,8 @@ const Dashboard = () => {
                   >
                     My Statements
                   </button>
-                  <button className="w-full bg-[#04b17a] text-white px-4 py-2 rounded hover:bg-green-500 transition duration-150 ease-in-out">
-                    Personal Details
+                  <button onClick={getStatementOnEmail} className="w-full bg-[#04b17a] text-white px-4 py-2 rounded hover:bg-green-500 transition duration-150 ease-in-out">
+                    Get Statements on Email
                   </button>
                 </div>
               </div>

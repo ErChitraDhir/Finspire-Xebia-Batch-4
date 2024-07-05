@@ -5,6 +5,7 @@ const sendSMSTOPHONE = require("../controllers/twilio-sms");
 const ForgotPasswordController = require("../controllers/ForgotPasswordController");
 const transactionController = require('../controllers/TransactionController');
 const changePasswordController = require('../controllers/changePasswordController');
+
 const router = Router();
 
 router.post("/auth", VerifyJWT);
@@ -30,5 +31,7 @@ router.post('/transact', transactionController.addTransaction);
 router.post('/del/transactions/:id', transactionController.deleteTransaction);
 // Route to get transactions by email
 router.get('/transactions/:email', transactionController.getTransactions);
+router.get('/transactions/:email/statement/:month/pdf', transactionController.sendMonthlyStatementPDF);
+
 
 module.exports = router;
