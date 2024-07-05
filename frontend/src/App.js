@@ -13,6 +13,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import PrivacyAndSecurity from "./pages/PrivacyAndSecurity";
 import ChangePassword from "./pages/ChangePassword";
 import ProgressBar from "./components/ProgressBar";
+import UploadDocuments from "./pages/UploadDocuments";
 import Dashboard from "./pages/Dashboard"
 import Statements from "./pages/Statements"
 import "./App.css";
@@ -71,6 +72,7 @@ const AppContent = () => {
                 <Route path="/address-form" element={<AddressForm onComplete={incrementPersonalForms} />} />
                 <Route path="/personal-details" element={<PersonalDetails onComplete={incrementPersonalForms} />} />
                 <Route path="/employment-details" element={<EmploymentDetails onComplete={incrementFinalDetailsForms }/>} />
+                <Route path="/upload-documents" element={<UploadDocuments onComplete={incrementFinalDetailsForms }/>} />
                 <Route path="/email-verification" element={<Email onComplete={incrementEmailForms} />} />
                 <Route path="/otp-validation" element={<OTP onComplete={incrementEmailForms} />} />
                 <Route path="/otp-validation-page" element={<LoginOTP />} />
