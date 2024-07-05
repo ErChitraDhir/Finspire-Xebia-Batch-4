@@ -1,18 +1,20 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { isLogin, setAuthentication } from "../utils/auth";
-
+import { useParams } from "react-router-dom";
 const Dashboard = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
   const [user, setUser] = useState({ email: "" });
-
+  const { userId } = useParams();
   const navigate = useNavigate();
 
   const navigateToStatement = async () => {
-    navigate("/dashboard/statement");
+    navigate(`/${userId}/dashboard/statement`);
   };
-
+  const navigateToPrivacy = async () => {
+    navigate(`/${userId}/privacy-and-security`);
+  };
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
@@ -43,9 +45,9 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-100" style={{fontFamily:"Prompt" ,fontWeight:"500"}}>
       {/* Navbar */}
-      <nav className="bg-indigo-600 shadow-lg">
+      <nav className="bg-[#ff4e4e] shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex-shrink-0 flex items-center">
@@ -55,7 +57,7 @@ const Dashboard = () => {
               <div className="relative" ref={dropdownRef}>
                 <button
                   onClick={toggleDropdown}
-                  className="bg-indigo-500 text-white rounded-full w-10 h-10 flex items-center justify-center focus:outline-none hover:bg-indigo-400 transition duration-150 ease-in-out"
+                  className="bg-transparent text-white rounded-full w-10 h-10 flex items-center justify-center focus:outline-none hover:bg-[#ff2e2eda] transition duration-150 ease-in-out"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -82,9 +84,10 @@ const Dashboard = () => {
                     </a>
                     <a
                       href="#"
+                      onClick={navigateToPrivacy }
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     >
-                      Change Password
+                      Privacy and Security
                     </a>
                     <a
                       href="#"
@@ -121,7 +124,7 @@ const Dashboard = () => {
                 <h3 className="text-lg leading-6 font-medium text-gray-900">
                   Total Balance
                 </h3>
-                <div className="mt-2 text-3xl font-bold text-indigo-600">
+                <div className="mt-2 text-3xl font-bold text-[#ff4e4e]">
                   $12,345.67
                 </div>
                 <p className="mt-1 text-sm text-gray-500">
@@ -152,11 +155,11 @@ const Dashboard = () => {
                 <div className="mt-2 space-y-2">
                   <button
                     onClick={navigateToStatement}
-                    className="w-full bg-red-600 text-white px-4 py-2 rounded hover:bg-red-900 transition duration-150 ease-in-out"
+                    className="w-full bg-[#ff4e4e] text-white px-4 py-2 rounded hover:bg-red-900 transition duration-150 ease-in-out"
                   >
                     My Statements
                   </button>
-                  <button className="w-full bg-green-600 text-white px-4 py-2 rounded hover:bg-green-500 transition duration-150 ease-in-out">
+                  <button className="w-full bg-[#04b17a] text-white px-4 py-2 rounded hover:bg-green-500 transition duration-150 ease-in-out">
                     Personal Details
                   </button>
                 </div>

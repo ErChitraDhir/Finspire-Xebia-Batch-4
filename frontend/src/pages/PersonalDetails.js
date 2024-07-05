@@ -3,12 +3,13 @@ import "../assets/PersonalDetails.css";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
-export default function PersonalDetailsForm() {
+export default function PersonalDetailsForm({onComplete}) {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const navigate = useNavigate();
 
     const onSubmit = async (formData) => {
         console.log(formData);
+        if (onComplete) onComplete(); 
         navigate('/address-form', { state: formData });
     };
 

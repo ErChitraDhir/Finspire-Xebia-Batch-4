@@ -48,7 +48,6 @@ const customerSchema = new mongoose.Schema(
     address: {
       flatName: {
         type: String,
-        required: [true, "Please Enter Flat Name"],
       },
       subBuilding: {
         type: String,
