@@ -1,11 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { isLogin, setAuthentication } from "../utils/auth";
+import { isLogin, getEmail } from "../utils/auth";
 import { useParams } from "react-router-dom";
+import {jwtDecode} from "jwt-decode"
+
 const Dashboard = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
-  const [user, setUser] = useState({ email: "" });
+  const [userEmail, setUser] = useState({ email: "" });
+  const [allTransactions, setTransactions] = useState([]);
   const { userId } = useParams();
   const navigate = useNavigate();
 
@@ -25,11 +28,17 @@ const Dashboard = () => {
       console.log("loggedIn", loggedIn);
 
       if (loggedIn.auth) {
-        setUser(loggedIn.data);
+        setUser(loggedIn.data.email);
+        console.log(
+          "Email in dashboard from token in function : ",
+          loggedIn.data.email
+        );
       } else {
         navigate("/login");
       }
     };
+
+    authenticate();
 
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -37,15 +46,35 @@ const Dashboard = () => {
       }
     };
 
-    authenticate();
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
+  useEffect(() => {
+    const getTransaction = async () => {
+      const tempEmail=getEmail();
+      setUser(tempEmail);
+      if (tempEmail) {
+        const response = await fetch(
+          `http://localhost:4001/customer/transactions/${tempEmail}`
+        );
+        const data = await response.json();
+        console.log("All Transations pre : ", data.transactions);
+        setTransactions(data.transactions);
+        console.log("All Transations : ", allTransactions);
+      }
+    };
+
+    getTransaction();
+  }, []);
+
   return (
-    <div className="min-h-screen bg-gray-100" style={{fontFamily:"Prompt" ,fontWeight:"500"}}>
+    <div
+      className="min-h-screen bg-gray-100"
+      style={{ fontFamily: "Prompt", fontWeight: "500" }}
+    >
       {/* Navbar */}
       <nav className="bg-[#ff4e4e] shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -84,7 +113,7 @@ const Dashboard = () => {
                     </a>
                     <a
                       href="#"
-                      onClick={navigateToPrivacy }
+                      onClick={navigateToPrivacy}
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     >
                       Privacy and Security
@@ -167,7 +196,6 @@ const Dashboard = () => {
             </div>
           </div>
 
-          {/* Recent Transactions */}
           <div className="bg-white shadow-lg rounded-lg overflow-hidden">
             <div className="px-4 py-5 sm:p-6">
               <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">
@@ -192,146 +220,30 @@ const Dashboard = () => {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    <tr>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        2023-07-01
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        Salary Deposit
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600">
-                        +$3,000.00
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        $12,345.67
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        2023-06-30
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        Online Purchase - Amazon
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-red-600">
-                        -$89.99
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        $9,345.67
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        2023-06-28
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        ATM Withdrawal
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-red-600">
-                        -$200.00
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        $9,435.66
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        2023-06-25
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        Grocery Store
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-red-600">
-                        -$152.33
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        $9,635.66
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        2023-06-22
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        Netflix Subscription
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-red-600">
-                        -$14.99
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        $9,787.99
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        2023-06-20
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        Transfer from Savings
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600">
-                        +$500.00
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        $9,802.98
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        2023-06-18
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        Restaurant - Dinner
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-red-600">
-                        -$78.50
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        $9,302.98
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        2023-06-15
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        Mobile Phone Bill
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-red-600">
-                        -$65.00
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        $9,381.48
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        2023-06-10
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        Gas Station
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-red-600">
-                        -$45.67
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        $9,446.48
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        2023-06-05
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        Online Transfer - Friend
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-red-600">
-                        -$100.00
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        $9,492.15
-                      </td>
-                    </tr>
+                    {allTransactions.map((transaction, index) => (
+                      <tr key={index}>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {transaction.createdAt}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          {transaction.description}
+                        </td>
+                        <td
+                          className={`px-6 py-4 whitespace-nowrap text-sm ${
+                            transaction.amount > 0
+                              ? "text-green-600"
+                              : "text-red-600"
+                          }`}
+                        >
+                          {transaction.amount > 0
+                            ? `+${transaction.amount}`
+                            : `${transaction.amount}`}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {transaction.balance}
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>
