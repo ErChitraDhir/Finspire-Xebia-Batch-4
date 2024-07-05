@@ -3,6 +3,7 @@ const VerifyJWT = require("../controllers/VerifyJWT");
 const customerController = require("../controllers/customerController");
 const sendSMSTOPHONE = require("../controllers/twilio-sms");
 const ForgotPasswordController = require("../controllers/ForgotPasswordController");
+const transactionController = require('../controllers/TransactionController');
 
 const router = Router();
 
@@ -19,5 +20,12 @@ router.post(
   "/forgot/password/:id/submit",
   ForgotPasswordController.changePasswordFromEmail
 );
+
+// Route to add a new transaction
+router.post('/transact', transactionController.addTransaction);
+// Route to delete a transaction by id
+router.post('/del/transactions/:id', transactionController.deleteTransaction);
+// Route to get transactions by email
+router.get('/transactions/:email', transactionController.getTransactions);
 
 module.exports = router;
