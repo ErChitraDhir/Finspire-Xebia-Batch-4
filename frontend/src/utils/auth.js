@@ -1,6 +1,7 @@
 import cookie from "js-cookie";
 import axios from "axios";
 import { baseURL } from "./constant";
+import { jwtDecode } from "jwt-decode";
 
 export const setCookie = (key, value) => {
   cookie.set(key, value, { expires: 1 });
@@ -30,4 +31,10 @@ export const isLogin = async () => {
     return res.data;
   }
   return false;
+};
+
+export const getEmail = () => {
+  const token = getCookie("token");
+  const decodedToken = jwtDecode(token);
+  return decodedToken.email;
 };
