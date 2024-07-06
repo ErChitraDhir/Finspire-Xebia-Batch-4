@@ -245,15 +245,13 @@ const LoginUserAccount = async (req, res) => {
 // EmploymentDetails
 const SubmitEmployment = async (req, res) => {
   try {
-    const data = req.body;
-    const user = new EmploymentDetails({ email,data });
+    const { email, ...data } = req.body;
+    const user = new EmploymentDetails({ email, data });
     await user.save();
-    res
-      .status(201)
-      .json({
-        message: "Employment Details Added successfully",
-        document: user,
-      });
+    res.status(201).json({
+      message: "Employment Details Added successfully",
+      document: user,
+    });
   } catch (error) {
     res.status(500).json({ message: "Error adding document", error });
   }

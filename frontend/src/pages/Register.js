@@ -31,12 +31,12 @@ function Register({onComplete}) {
         const result = await response.json();
         console.log("registered ! : ", result.message);
         if (onComplete) onComplete();   
-        navigate("/employment-details");
+        navigate("/employment-details",{ state: { email: data.email } });
     }else if (response.status === 201) {
         const result = await response.json();
         console.log("already registered ! : ", result.message);
         if (onComplete) onComplete();   
-        navigate("/employment-details");
+        navigate("/employment-details",{ state: { email: data.email } });
       } else {
         throw new Error("Failed to verify OTP");
       }
