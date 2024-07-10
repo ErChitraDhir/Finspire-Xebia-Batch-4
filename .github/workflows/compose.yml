@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "4001:4001"
+    environment:
+      PORT: 4001
+      MONGODB_URI: "mongodb://localhost:27017/bankingapplication"
+      JWT_LOGIN_TOKEN: "#"
+      EMAILPASSWORD: "#"
+      EMAILID: "#"
+      TWILIO_ACCOUNT_SID: "#"
+      TWILIO_AUTH_TOKEN: "#"
+      TWILIO_SERVICE_SID: "#"
