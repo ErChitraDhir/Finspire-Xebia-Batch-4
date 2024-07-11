@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
-import Home from "./pages/Home";
+import Home from "./pages/HomePage";
 import AddressForm from "./pages/AddressForm";
 import PersonalDetails from "./pages/PersonalDetails";
 import EmploymentDetails from "./pages/EmploymentDetails";
@@ -15,9 +15,11 @@ import ChangePassword from "./pages/ChangePassword";
 import ProgressBar from "./components/ProgressBar";
 import Dashboard from "./pages/Dashboard"
 import Statements from "./pages/Statements"
-import UploadDocuments from "./pages/UploadDocuments";
 import "./App.css";
-
+import Document from "./pages/Document";
+import DragnDrop from "./pages/DragnDrop";
+import Contact from "./pages/Contact";
+import About from "./pages/About"
 const AppContent = () => {
     const location = useLocation();
     const [personalFormsCompleted, setPersonalFormsCompleted] = useState(0);
@@ -40,6 +42,9 @@ const AppContent = () => {
         "/:userId/dashboard",
         "/:userId/dashboard/statement",
         "/forgot/password",
+        "/document",
+        "/about",
+        "/contact"
     ];
 
     const shouldExcludeProgressBars = excludeProgressBarRoutes.some(route =>
@@ -69,10 +74,13 @@ const AppContent = () => {
             )}
             <Routes>
                 <Route path="/" element={<Home />} />
+                <Route path="/document" element={<Document />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/about" element={<About/>} />
                 <Route path="/address-form" element={<AddressForm onComplete={incrementPersonalForms} />} />
                 <Route path="/personal-details" element={<PersonalDetails onComplete={incrementPersonalForms} />} />
                 <Route path="/employment-details" element={<EmploymentDetails onComplete={incrementFinalDetailsForms }/>} />
-                <Route path="/upload-documents" element={<UploadDocuments onComplete={incrementFinalDetailsForms }/>} />
+                <Route path="/upload-documents" element={<DragnDrop onComplete={incrementFinalDetailsForms }/>} />
                 <Route path="/email-verification" element={<Email onComplete={incrementEmailForms} />} />
                 <Route path="/otp-validation" element={<OTP onComplete={incrementEmailForms} />} />
                 <Route path="/otp-validation-page" element={<LoginOTP />} />

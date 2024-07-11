@@ -27,7 +27,7 @@ export default function PrivacyAndSecurity() {
         <div className="privacy-security-wrapper">
             <div className="privacy-security-container">
             <button onClick={handleGoBack} className="back-button">
-                <FaArrowLeft className="icon" /> Go back
+                <FaArrowLeft className="iconPS" /> Go back
             </button>
                 <div className="privacy-security-content">
                     <h2>Privacy & Security</h2>

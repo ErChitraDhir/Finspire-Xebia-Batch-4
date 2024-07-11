@@ -1,0 +1,30 @@
+:root {
+  --black: #000000;
+  --white: #ffffff;
+  --green: #00643e;
+  --beige: #cfccb8;
+  --gray: #ccc;
+}
+
+.contact {
+  padding: 80px;
+  width: 90%;
+}
+.c-para {
+  text-align: center;
+  font-size: 18px;
+  width: 70%;
+}
+.contact-img {
+  margin: 40px 200px;
+  height: 60vh;
+  border-radius: 20px;
+  box-shadow: 0 2px 10px 3px var(--black);
+}
+.contact-details {
+  margin: 0 auto;
+  height: 30vh;
+  float: right;
+  padding-top: 80px;
+  width: 40%;
+}
