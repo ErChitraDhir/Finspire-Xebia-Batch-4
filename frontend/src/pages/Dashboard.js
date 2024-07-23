@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { isLogin, getEmail } from "../utils/auth";
+import { isLogin, getEmail, logOut } from "../utils/auth";
 import { useParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 
@@ -24,10 +24,9 @@ const Dashboard = () => {
     );
     const data = await response.json();
     console.log(response);
-    if(response.status==200){
+    if (response.status == 200) {
       alert("Statement sent to your email");
     }
-
   };
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -135,12 +134,12 @@ const Dashboard = () => {
                     >
                       Settings
                     </a>
-                    <a
-                      href="#"
+                    <button
+                      onClick={logOut}
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     >
                       Sign out
-                    </a>
+                    </button>
                   </div>
                 )}
               </div>
@@ -165,10 +164,10 @@ const Dashboard = () => {
                   Total Balance
                 </h3>
                 <div className="mt-2 text-3xl font-bold text-[#ff4e4e]">
-                  $12,345.67
+                  ₹1,000.00
                 </div>
                 <p className="mt-1 text-sm text-gray-500">
-                  Available: $10,234.56
+                  Available: ₹1,000.00
                 </p>
               </div>
             </div>
@@ -199,7 +198,10 @@ const Dashboard = () => {
                   >
                     My Statements
                   </button>
-                  <button onClick={getStatementOnEmail} className="w-full bg-[#04b17a] text-white px-4 py-2 rounded hover:bg-green-500 transition duration-150 ease-in-out">
+                  <button
+                    onClick={getStatementOnEmail}
+                    className="w-full bg-[#04b17a] text-white px-4 py-2 rounded hover:bg-green-500 transition duration-150 ease-in-out"
+                  >
                     Get Statements on Email
                   </button>
                 </div>
@@ -247,7 +249,7 @@ const Dashboard = () => {
                           }`}
                         >
                           {transaction.amount > 0
-                            ? `+${transaction.amount}`
+                            ? `+ ₹ ${transaction.amount}`
                             : `${transaction.amount}`}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

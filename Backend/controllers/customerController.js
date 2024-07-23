@@ -198,7 +198,8 @@ const RegisterUsernameAccount = async (req, res) => {
     await user.save();
 
     res.status(200).json({ message: "User registered successfully", user });
-  } catch (error) {
+  } 
+  catch (error) {
     res
       .status(400)
       .json({ message: "Failed to register user", error: error.message });
